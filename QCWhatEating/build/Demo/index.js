@@ -648,12 +648,37 @@ exports.default = {
         break;
 
     };
-    if (this.tjtag == "" || this.tjtag == null || this.tjtag == undefined) {
-      this.tjnametwo = "休息一会儿吧";
-    }
-
     var that = this;
-    console.log(this.tjtag);
+    if (this.tjtag == "" || this.tjtag == null || this.tjtag == undefined) {
+      this.tjnametwo = "还没到点,休息一会儿吧";
+    } else {
+      _system6.default.fetch({
+        url: 'http://apis.juhe.cn/cook/query?key=' + key + '&menu=' + that.tjtag + '&rn=&pn=',
+        success: function success(data) {
+          var tjtags = JSON.parse(data.data).result.data;
+          if (tjtags.length == 1) {
+            console.log('1');
+            that.tjnametwo = tjtags[0].title;
+          } else if (tjtags.length == 2) {
+            that.tjnameone = tjtags[1].title;
+            that.tjnametwo = tjtags[0].title;
+            console.log('2');
+          } else if (tjtags.length == 3) {
+            that.tjnameone = tjtags[0].title;
+            that.tjnametwo = tjtags[1].title;
+            that.tjnamethree = tjtags[2].title;
+            console.log('3');
+          } else if (tjtags.length > 3) {
+            console.log('4');
+          } else {
+            that.tjnametwo = "还没到点,休息一会儿吧";
+          }
+        },
+        fail: function fail(data, code) {
+          that.tjnametwo = "还没到点,休息一会儿吧";
+        }
+      });
+    }
 
     _system12.default.get({
       uri: 'internal://files/what/caipu.json',
@@ -662,7 +687,7 @@ exports.default = {
           uri: data.uri,
           success: function success(datas) {
 
-            if (JSON.parse(JSON.parse(datas.text)).result.length == 28) {
+            if (JSON.parse(JSON.parse(datas.text)).result.length >= 28) {
               var items = ['0', '1', '2', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27'];
               var round = getRandomArrayElements(items, 6);
               var objcaipu = JSON.parse(JSON.parse(datas.text)).result;
@@ -671,7 +696,7 @@ exports.default = {
               that.caiputypeonetwoname = objcaipu[round[1]].name;
               that.imageii02 = "../Common/MainImage/" + objcaipu[round[1]].parentId + ".jpg";
               that.caiputypeonethreename = objcaipu[round[2]].name;
-              that.imageii03 = "../Common/MainImage/" + objcaipu[round[3]].parentId + ".jpg";
+              that.imageii03 = "../Common/MainImage/" + objcaipu[round[2]].parentId + ".jpg";
               that.caiputypetwoonename = objcaipu[round[3]].name;
               that.imageii04 = "../Common/MainImage/" + objcaipu[round[3]].parentId + ".jpg";
               that.caiputypetwotwoname = objcaipu[round[4]].name;
@@ -686,14 +711,29 @@ exports.default = {
         _system6.default.fetch({
           url: 'http://apis.juhe.cn/cook/category?key=' + key,
           success: function success(data) {
-            console.log(JSON.stringify(data.data));
             this.tsetmsg = JSON.stringify(data.data);
 
             _system12.default.writeText({
               uri: 'internal://files/what/caipu.json',
               text: this.tsetmsg,
               success: function success() {
-                console.log('handling success');
+                var caiputags = JSON.parse(data.data);
+                if (caiputags.result.length >= 28) {
+                  var items = ['0', '1', '2', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27'];
+                  var round = getRandomArrayElements(items, 6);
+                  that.caiputypeoneonename = caiputags.result[round[0]].name;
+                  that.imageii01 = "../Common/MainImage/" + caiputags.result[round[0]].parentId + ".jpg";
+                  that.caiputypeonetwoname = caiputags.result[round[1]].name;
+                  that.imageii02 = "../Common/MainImage/" + caiputags.result[round[1]].parentId + ".jpg";
+                  that.caiputypeonethreename = caiputags.result[round[2]].name;
+                  that.imageii03 = "../Common/MainImage/" + caiputags.result[round[2]].parentId + ".jpg";
+                  that.caiputypetwoonename = caiputags.result[round[3]].name;
+                  that.imageii04 = "../Common/MainImage/" + caiputags.result[round[3]].parentId + ".jpg";
+                  that.caiputypetwotwoname = caiputags.result[round[4]].name;
+                  that.imageii05 = "../Common/MainImage/" + caiputags.result[round[4]].parentId + ".jpg";
+                  that.caiputypetwothreename = caiputags.result[round[5]].name;
+                  that.imageii06 = "../Common/MainImage/" + caiputags.result[round[5]].parentId + ".jpg";
+                }
               }
             });
           },

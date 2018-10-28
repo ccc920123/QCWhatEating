@@ -220,11 +220,11 @@
       caiputypetwotwoname: '',
       caiputypetwothreename: '',
       imageii01: '',
-      imageii02:'',
-      imageii03:'',
-      imageii04:'',
-      imageii05:'',
-      imageii06:'',
+      imageii02: '',
+      imageii03: '',
+      imageii04: '',
+      imageii05: '',
+      imageii06: '',
 
 
 
@@ -236,7 +236,7 @@
       var key = "bdf36bef0d0829a548b8704e4eda6247";
       var mydate = new Date();
       var myhour = mydate.getHours();
-   
+
       switch (myhour) {
         case 0:
           this.hellotitle = "凌晨";
@@ -255,38 +255,38 @@
           break;
         case 5:
           this.hellotitle = "清晨";
-          this.tjtag="早餐";
+          this.tjtag = "早餐";
           break;
         case 6:
           this.hellotitle = "清晨";
-          this.tjtag="早餐";
+          this.tjtag = "早餐";
           break;
         case 7:
           this.hellotitle = "早上";
-          this.tjtag="早餐";
+          this.tjtag = "早餐";
           break;
         case 8:
           this.hellotitle = "早上";
-          this.tjtag="早餐";
+          this.tjtag = "早餐";
           break;
         case 9:
           this.hellotitle = "上午";
           break;
         case 10:
           this.hellotitle = "上午";
-          this.tjtag="午餐";
+          this.tjtag = "午餐";
           break;
         case 11:
           this.hellotitle = "上午";
-          this.tjtag="午餐";
+          this.tjtag = "午餐";
           break;
         case 12:
           this.hellotitle = "中午";
-          this.tjtag="午餐";
+          this.tjtag = "午餐";
           break;
         case 13:
           this.hellotitle = "中午";
-          this.tjtag="午餐";
+          this.tjtag = "午餐";
           break;
         case 14:
           this.hellotitle = "下午";
@@ -296,27 +296,27 @@
           break;
         case 16:
           this.hellotitle = "下午";
-          this.tjtag="晚餐";
+          this.tjtag = "晚餐";
           break;
         case 17:
           this.hellotitle = "下午";
-          this.tjtag="晚餐";
+          this.tjtag = "晚餐";
           break;
         case 18:
           this.hellotitle = "傍晚";
-          this.tjtag="晚餐";
+          this.tjtag = "晚餐";
           break;
         case 19:
           this.hellotitle = "晚上";
-          this.tjtag="夜宵";
+          this.tjtag = "夜宵";
           break;
         case 20:
           this.hellotitle = "晚上";
-          this.tjtag="夜宵";
+          this.tjtag = "夜宵";
           break;
         case 21:
           this.hellotitle = "晚上";
-          this.tjtag="夜宵";
+          this.tjtag = "夜宵";
           break;
         case 22:
           this.hellotitle = "晚上";
@@ -324,22 +324,78 @@
         case 23:
           this.hellotitle = "晚上";
           break;
-          
+
       };
       const that = this;
-     if( this.tjtag == "" ||  this.tjtag == null ||  this.tjtag == undefined){ // "",null,undefined
-        this.tjnametwo="休息一会儿吧";
-    }else{
-    //  调取接口获取数据
-    url: 'http://apis.juhe.cn/cook/query?key='+ key+'&menu='+that.tjtag+'&rn=&pn=';
-    
+      if (this.tjtag == "" || this.tjtag == null || this.tjtag == undefined) { // "",null,undefined
+        this.tjnametwo = "还没到点,休息一会儿吧";
+      } else {
+        //  调取接口获取数据
+        //推荐的饮食
+        //这里将开始请求推荐饮食数据
+        fetch.fetch({
+          url: 'http://apis.juhe.cn/cook/query?key=' + key + '&menu=' + that.tjtag + '&rn=&pn=',
+          success: function (data) {
+            var tjtags = JSON.parse(data.data).result.data;
+            if (tjtags.length == 1) {
+              console.log('1');
+              that.tjnametwo = tjtags[0].title;
+            } else if (tjtags.length == 2) {
+              that.tjnameone = tjtags[1].title;
+              that.tjnametwo = tjtags[0].title;
+              console.log('2');
+            } else if (tjtags.length == 3) {
+              that.tjnameone = tjtags[0].title;
+              that.tjnametwo = tjtags[1].title;
+              that.tjnamethree = tjtags[2].title;
+              console.log('3');
+            } else if (tjtags.length > 3) {
+              console.log('4');
+            } else {
+              that.tjnametwo = "还没到点,休息一会儿吧";
+            }
+            //  resultcode
+            // resultcode
+          },
+          fail: function (data, code) {
+            that.tjnametwo = "还没到点,休息一会儿吧";
 
-    }
-     
+          }
+        })
+      }
 
+      ///测试数据开
 
-    
-     console.log(this.tjtag);
+      //  fetch.fetch({
+      //             url: 'http://apis.juhe.cn/cook/category?key=' + key,
+      //             success: function (data) {
+      //               var caiputags=JSON.parse(data.data);
+      //               if(caiputags.result.length>=28){
+      //                 var items = ['0', '1', '2', '4', '5', '6', '7', '8', '9', '10',
+      //                   '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21',
+      //                   '22', '23', '24', '25', '26', '27'];
+      //                 var round = getRandomArrayElements(items, 6);
+      //                 that.caiputypeoneonename = caiputags.result[round[0]].name;
+      //                 that.imageii01 = "../Common/MainImage/" + caiputags.result[round[0]].parentId + ".jpg";
+      //                 that.caiputypeonetwoname = caiputags.result[round[1]].name;
+      //                 that.imageii02 = "../Common/MainImage/" + caiputags.result[round[1]].parentId + ".jpg";
+      //                 that.caiputypeonethreename = caiputags.result[round[2]].name;
+      //                 that.imageii03 = "../Common/MainImage/" + caiputags.result[round[2]].parentId + ".jpg";
+      //                 that.caiputypetwoonename = caiputags.result[round[3]].name;
+      //                 that.imageii04 = "../Common/MainImage/" + caiputags.result[round[3]].parentId + ".jpg";
+      //                 that.caiputypetwotwoname = caiputags.result[round[4]].name;
+      //                 that.imageii05 = "../Common/MainImage/" + caiputags.result[round[4]].parentId + ".jpg";
+      //                 that.caiputypetwothreename = caiputags.result[round[5]].name;
+      //                 that.imageii06 = "../Common/MainImage/" + caiputags.result[round[5]].parentId + ".jpg";
+      //               }
+      //             },
+      //             fail: function (data, code) {
+      //               prompt.showToast({
+      //                 message: '数据请求失败',
+      //               })
+      //             }
+      //           })
+      /////测试结束
 
       //先判断本地是否有储存数据
       file.get({
@@ -350,7 +406,7 @@
             uri: data.uri,
             success: function (datas) {
 
-              if ((JSON.parse(JSON.parse(datas.text)).result.length) == 28) {
+              if ((JSON.parse(JSON.parse(datas.text)).result.length) >= 28) {
                 var items = ['0', '1', '2', '4', '5', '6', '7', '8', '9', '10',
                   '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21',
                   '22', '23', '24', '25', '26', '27'];
@@ -361,16 +417,15 @@
                 that.caiputypeonetwoname = objcaipu[round[1]].name;
                 that.imageii02 = "../Common/MainImage/" + objcaipu[round[1]].parentId + ".jpg";
                 that.caiputypeonethreename = objcaipu[round[2]].name;
-                that.imageii03 = "../Common/MainImage/" + objcaipu[round[3]].parentId + ".jpg";
+                that.imageii03 = "../Common/MainImage/" + objcaipu[round[2]].parentId + ".jpg";
                 that.caiputypetwoonename = objcaipu[round[3]].name;
                 that.imageii04 = "../Common/MainImage/" + objcaipu[round[3]].parentId + ".jpg";
                 that.caiputypetwotwoname = objcaipu[round[4]].name;
                 that.imageii05 = "../Common/MainImage/" + objcaipu[round[4]].parentId + ".jpg";
                 that.caiputypetwothreename = objcaipu[round[5]].name;
                 that.imageii06 = "../Common/MainImage/" + objcaipu[round[5]].parentId + ".jpg";
-                // console.log('---' +JSON.stringify($app));
+                
               }
-
             }
           })
         },
@@ -379,41 +434,51 @@
           fetch.fetch({
             url: 'http://apis.juhe.cn/cook/category?key=' + key,
             success: function (data) {
-              console.log(JSON.stringify(data.data));
               this.tsetmsg = JSON.stringify(data.data);
               //将数据存起来
               file.writeText({
                 uri: 'internal://files/what/caipu.json',
                 text: this.tsetmsg,
                 success: function () {
-                  console.log('handling success')
-                  //可以操作数据了
-
-
-
+                  //这里操作数据
+                  var caiputags = JSON.parse(data.data);
+                  if (caiputags.result.length >= 28) {
+                    var items = ['0', '1', '2', '4', '5', '6', '7', '8', '9', '10',
+                      '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21',
+                      '22', '23', '24', '25', '26', '27'];
+                    var round = getRandomArrayElements(items, 6);
+                    that.caiputypeoneonename = caiputags.result[round[0]].name;
+                    that.imageii01 = "../Common/MainImage/" + caiputags.result[round[0]].parentId + ".jpg";
+                    that.caiputypeonetwoname = caiputags.result[round[1]].name;
+                    that.imageii02 = "../Common/MainImage/" + caiputags.result[round[1]].parentId + ".jpg";
+                    that.caiputypeonethreename = caiputags.result[round[2]].name;
+                    that.imageii03 = "../Common/MainImage/" + caiputags.result[round[2]].parentId + ".jpg";
+                    that.caiputypetwoonename = caiputags.result[round[3]].name;
+                    that.imageii04 = "../Common/MainImage/" + caiputags.result[round[3]].parentId + ".jpg";
+                    that.caiputypetwotwoname = caiputags.result[round[4]].name;
+                    that.imageii05 = "../Common/MainImage/" + caiputags.result[round[4]].parentId + ".jpg";
+                    that.caiputypetwothreename = caiputags.result[round[5]].name;
+                    that.imageii06 = "../Common/MainImage/" + caiputags.result[round[5]].parentId + ".jpg";
+                  }
                 }
               })
-
-
-
             },
             fail: function (data, code) {
               prompt.showToast({
                 message: '数据请求失败',
               })
-
             }
           })
         }
       })
-      // this.tsetmsg = JSON.stringify(app.getInfo());
     },
+    //开始跳转应用
     routeDetail() {
       // 跳转到应用内的某个页面，router用法详见：文档->接口->页面路由
       router.push({
-      
+
         uri: '/DemoDetail'
-      
+
       })
     },
 
