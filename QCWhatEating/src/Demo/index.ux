@@ -4,8 +4,9 @@
     <text class="hello">Hi客官{{hellotitle}}好!</text>
     <div class="seachspan">
 
-      <input type="text" class="seacheating" maxlength="16" placeholder="{{hellotitle}}想吃点什么?" />
-      <input class="soutu-btn" type="button" value="搜一下" onclick="routeDetail" />
+      <input type="text" class="seacheating" maxlength="16" placeholder="{{hellotitle}}想吃点什么?" value="{{eatingInput}}" @change="bindPhoneChange"
+      />
+      <input class="soutu-btn" type="button" value="搜一下" onclick="searchEating" />
     </div>
 
     <text class="tuijian">推荐</text>
@@ -225,6 +226,7 @@
       imageii04: '',
       imageii05: '',
       imageii06: '',
+      eatingInput: '',
 
 
 
@@ -424,7 +426,7 @@
                 that.imageii05 = "../Common/MainImage/" + objcaipu[round[4]].parentId + ".jpg";
                 that.caiputypetwothreename = objcaipu[round[5]].name;
                 that.imageii06 = "../Common/MainImage/" + objcaipu[round[5]].parentId + ".jpg";
-                
+
               }
             }
           })
@@ -472,14 +474,23 @@
         }
       })
     },
-    //开始跳转应用
-    routeDetail() {
+    //开始跳转到搜索界面
+    searchEating() {
       // 跳转到应用内的某个页面，router用法详见：文档->接口->页面路由
-      router.push({
+      console.log(this.eatingInput);
+      if (this.eatingInput == '') {
+        prompt.showToast({
+                message: '你要搜点什么？',
+              })
+       } else {
+       
+        
+        router.push({
+          uri: '/DemoDetail',
+          params: { key: this.eatingInput }
 
-        uri: '/DemoDetail'
-
-      })
+        })
+      }
     },
 
 
@@ -487,7 +498,11 @@
 
 
 
+    bindPhoneChange(e) {
+      //值就是e.value
+      this.eatingInput = e.value;
 
+    }
 
   }
   export function getRandomArrayElements(arr, count) {

@@ -147,9 +147,9 @@
       icon: null
     },
     private: {
-      desc: '即点即用，让你省去下载安装的步骤，立即使用各类服务',
+      desc: '想吃啥？不知道？吃什么？不会做？做饭小助手私人厨帮你',
       serviceType: '工具类',
-      subjectInfo: 'xxx有限公司',
+      subjectInfo: '陈渝金撰写',
       copyright: ''
     },
     onInit () {
