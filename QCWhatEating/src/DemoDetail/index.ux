@@ -1,63 +1,106 @@
 <template>
-  <!-- template里只能有一个根节点 -->
-
     <list class="home-page" onscrollbottom="loadMoreData">
-        <!-- 文章 -->
-        <block for="articleList">
-          <list-item type="article" class="article-item" onclick="openArticle($item.link, $item.projectLink, $item.title)" onlongpress="shareLink($item.link)">
-            <div style="display: flex">
-              <text class="tag" show="{{$item.fresh}}">新</text>
-              <text class="text-title" style="flex: 1">这是一个url</text>
-              <image style="width: 52px;height: 52px;" src="../Common/logo.png" onclick="clickCollect($item)"></image>
-            </div>
-            <div class="article-tip">
-                <text class="tip">分类: {{$item.superChapterName}}/{{$item.chapterName}}</text>
-            </div>
-            <div class="article-tip">
-              <text class="tip">作者: {{$item.author}}</text>
-              <text class="time">{{$item.niceDate}}</text>
-            </div>
-          </list-item>
-        </block>
+      <!-- 顶部图片
+      <list-item type="banner">
+        <swiper class="banner" autoplay="true" interval="4000">
+          <stack class="banner" for="{{bannerlist}}">
+            <image class="banner-image" src="{{$item.imagePath}}" onclick="openArticle($item.url, '', $item.title)"></image>
+            <text class="banner-title">{{$item.title}}</text>
+          </stack>
+        </swiper>
+      </list-item>
+      <list-item type="tip">
+        <text class="text-tip">最新博文--长按可分享文章~</text>
+      </list-item> -->
 
-      </list>
+      <!-- 文章 -->
+      <block for="articleList">
+        <list-item type="article" class="article-item" onclick="openArticle($item.link, $item.projectLink, $item.title)" onlongpress="shareLink($item.link)">
+          <div style="display: flex">
+            <text class="tag" show="{{$item.fresh}}">新</text>
+            <text class="text-title" style="flex: 1">{{$item.title}}</text>
+            <image style="width: 52px;height: 52px;"  onclick="clickCollect($item)"></image>
+          </div>
+          <div class="article-tip">
+            <text class="tip">分类: {{$item.superChapterName}}/{{$item.chapterName}}</text>
+          </div>
+          <div class="article-tip">
+            <text class="tip">作者: {{$item.author}}</text>
+            <text class="time">{{$item.niceDate}}</text>
+          </div>
+        </list-item>
+      </block>
+
+      <!-- 加载更多，type属性自定义命名为loadMore -->
+      <list-item type="loadMore" class="load-more" if="articleList.length > 0">
+        <progress type="circular" show="{{hasMoreData}}"></progress>
+        <text show="{{hasMoreData}}">加载更多</text>
+        <text show="{{!hasMoreData}}">没有更多了~</text>
+      </list-item>
+    </list>
+
 
 </template>
 
 <style>
-  .home-page
-  {
-    flex-direction:row;
-    columns: 1;
-
+  .banner,
+  .banner-image {
+    width: 100%;
+    height: 420px;
   }
+
+  .banner-title {
+    text-overflow: ellipsis;
+    lines: 1;
+    text-align: center;
+    height: 90px;
+    width: 100%;
+    color: #ffffff;
+    background-color: #000000;
+    opacity: 0.5;
+  }
+
   .article-item {
     padding: 20px;
     display: flex;
     flex-direction: column;
     border-bottom-width: 1px;
     border-bottom-color: #eeeeee;
-    column-span:3;
+  }
+
+  .text-tip {
+    width: 100%;
+    padding: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-bottom-width: 1px;
+    border-bottom-color: #eeeeee;
   }
 
   .article-item .text-title {
     font-size: 30px;
     color: #2e3135;
     text-overflow: ellipsis;
+    lines: 1;
     margin-bottom: 5px;
   }
+
   .article-item .article-tip {
     display: flex;
     flex-direction: row;
   }
-  .article-tip .tip, .article-tip .time {
+
+  .article-tip .tip,
+  .article-tip .time {
     font-size: 26px;
     color: #999999;
   }
+
   .time {
     flex: 1;
     text-align: right;
   }
+
   .tag {
     font-size: 22px;
     color: #FF0000;
@@ -67,29 +110,56 @@
     padding: 2px;
     height: 32px;
   }
-  
-  /* .list-item {
-        height: 150px;
-        border-bottom-width: 1px;
-        border-bottom-color: #0faeff;
+
+  .load-more {
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
   }
-  .text {
-          flex: 1;
-          text-align: center;
-        } */
 </style>
 
 <script>
   export default {
     data: {
       text: '欢迎打开详情页',
-      key: ''
-    },
-    onInit()
-    {
-
+      key: '',
+  
+      articleList:  [{title:'123',superChapterName:'分类',chapterName:'分类1',author:'cyj',niceDate:'15点34分'},
+      {title:'123',superChapterName:'分类',chapterName:'分类1',author:'cyj',niceDate:'15点34分'}],
+      page: 0,
+      hasMoreData: true,
+      isRefreshing: false,
       
-console.info('key: ' + this.key)
+    },
+    onInit() {
+     
+
+      console.info('key: ' + this.key)
+
+///测试
+
+
+
+
+
+
+
+
+
+    },
+    //点击item
+    openArticle(link, projectLink, title) {
+      var url = projectLink === '' ? link : projectLink
+      if(url !== '') {
+        this.$app.$def.router.push({
+          uri: 'Webview',
+          params: { 
+            title: title,
+            url: url
+          }
+        })
+      }
     },
     /**
      * 当用户点击菜单按钮时触发，调用app中定义的方法showMenu
@@ -98,6 +168,6 @@ console.info('key: ' + this.key)
     onMenuPress() {
       this.$app.$def.showMenu()
     }
-   
+
   }
 </script>
