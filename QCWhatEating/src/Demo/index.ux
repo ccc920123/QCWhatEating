@@ -110,9 +110,8 @@
   }
 
   .clstjnametwo {
-    font-size: 45px;
+    font-size: 40px;
     color: #FF6347;
-    font-weight: bold;
     margin-top: 20px;
     text-align: center;
 
