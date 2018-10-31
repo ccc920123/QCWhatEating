@@ -1,35 +1,40 @@
 <template>
- 
+
   <list class="home-page" onscrollbottom="loadMoreData">
-      <list-item>
+    
+    <list-item>
       <div class="seachspan">
-          <input type="text" class="seacheating" maxlength="16" placeholder="想吃点什么?" value="{{eatinginput}}" @change="bindphonechange"/>
-          <input class="soutu-btn" type="button" value="搜一下" onclick="searcheating" />
-        </div>
-      </list-item>
-    <block for="articleList">
-      <list-item type="article" class="article-item" onclick="openArticle($item.link, $item.projectLink, $item.title)" onlongpress="shareLink($item.link)">
+        <input type="text" class="seacheating" maxlength="16" placeholder="想吃点什么?" value="{{eatinginput}}" @change="bindphonechange"
+        />
+        <input class="soutu-btn" type="button" value="搜一下" onclick="searcheating" />
+      </div>
+    </list-item>
+    <list-item show="{{hasData}}">
+        <text>哎呀，没有找到你要的</text>
+    </list-item>
+    <block for="articleList" show="{{hasMoreData}}">
+      <list-item type="article"  class="article-item" onclick="openArticle($item.id, $item.albums, $item.title,$item.ingredients,$item.burden,$item.tags,$item.steps,$item.imtro)" onlongpress="shareLink($item.link)">
         <div style="display: flex">
 
-          <image class="clsimage" style="width: 200px;height: 200px;" src="{{$item.cpimage}}"></image>
+          <image class="clsimage" style="width: 200px;height: 200px;" src="{{$item.albums[0]}}"></image>
 
           <div class="article-tip" style="flex-direction: column">
             <text class="text-title" style="flex: 1">{{$item.title}}</text>
 
 
-            <text class="tip" style="flex: 1">主材: {{$item.superChapterName}}</text>
-            <text class="time" style="flex: 1">配料: {{$item.niceDate}}</text>
+            <text class="tip" style="flex: 1">主材: {{$item.ingredients}}</text>
+            <text class="time" style="flex: 1">配料: {{$item.burden}}</text>
           </div>
         </div>
       </list-item>
     </block>
 
     <!-- 加载更多，type属性自定义命名为loadMore -->
-    <list-item type="loadMore" class="load-more" if="articleList.length > 0">
+    <!-- <list-item type="loadMore" class="load-more" if="articleList.length > 0">
       <progress type="circular" show="{{hasMoreData}}"></progress>
       <text show="{{hasMoreData}}">加载更多</text>
       <text show="{{!hasMoreData}}">没有更多了~</text>
-    </list-item>
+    </list-item> -->
   </list>
 
 
@@ -74,6 +79,8 @@
     flex-direction: column;
     border-bottom-width: 1px;
     border-bottom-color: #eeeeee;
+    width: 100%;
+    height: 220px;
   }
 
   .clsimage {
@@ -126,24 +133,65 @@
 </style>
 
 <script>
+  import router from '@system.router'
+  import app from '@system.app'
+  import fetch from '@system.fetch'
+  import prompt from '@system.prompt'
   export default {
     data: {
       eatinginput: '',
       key: '',
-      
-      articleList: [{ cpimage: 'http://img.juhe.cn/cookbook/t/1/909_135871.jpg', title: '123', superChapterName: '分类', niceDate: '15点34分' },
-      { title: '123', superChapterName: '分类', author: 'cyj', niceDate: '15点34分' }],
+      articleList: [],
       page: 0,
+      hasData: false,
       hasMoreData: true,
-      isRefreshing: false,
 
     },
+    // {
+    //     id: '4',
+    //     albums: [],
+    //     title: '',
+    //     ingredients: '',
+    //     burden: '',
+    //     tags: '家常菜',
+    //     steps: [],
+    //     imtro: '',
+    //   }
     onInit() {
+      var key = "bdf36bef0d0829a548b8704e4eda6247";
+      var caimingsearch = 'http://apis.juhe.cn/cook/query?key=' + key + '&rn=30&menu=' + this.key;
+      const that = this;
+      fetch.fetch({
+        url: caimingsearch,
+        success: function (data) {
+          // console.info('key: ' + JSON.parse(data.data).result);
+          if (JSON.parse(data.data).result != null) {
+            var caimingarry = JSON.parse(data.data).result.data;
+            if (caimingarry.length > 0) {
+              that.hasData=false;
+              that.hasMoreData=true;
+              that.articleList = caimingarry;
 
+            } else {
+              //没有数据
+              that.hasData=true;
+              that.hasMoreData=false;
 
-      console.info('key: ' + this.key)
+            }
+          } else {
+            //没有数据
+            that.hasData=true;
+              that.hasMoreData=false;
+          }
 
-      ///测试
+        },
+        fail: function (data, code) {
+          prompt.showToast({
+            message: '哎呀，没有网络了',
+          })
+        }
+
+      })
 
 
 
@@ -155,7 +203,7 @@
 
     },
     //点击item
-    openArticle(link, projectLink, title) {
+    openArticle(id, albums, title,ingredients,burden,tags,steps,imtro) {
       var url = projectLink === '' ? link : projectLink
       if (url !== '') {
         this.$app.$def.router.push({
