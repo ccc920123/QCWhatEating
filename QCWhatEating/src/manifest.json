@@ -50,6 +50,10 @@
       },
       "About": {
         "component": "index"
+      },
+      "Webview":
+      {
+        "component": "index"
       }
     }
   },
@@ -59,13 +63,18 @@
     "menu": true,
     "pages": {
       "Demo": {
-        "titleBarText": "私人厨",
-        "menu": false
+        "titleBarText": "私人厨"
+        
       },
       "DemoDetail": {
         "titleBarText": "菜谱列表"
       },
       "About": {
+        "menu": false
+
+      },
+      "Webview":{
+        "titleBarText": "菜肴详情",
         "menu": false
       }
     }

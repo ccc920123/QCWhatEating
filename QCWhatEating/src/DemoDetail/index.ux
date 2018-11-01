@@ -13,7 +13,7 @@
         <text>哎呀，没有找到你要的</text>
     </list-item>
     <block for="articleList" show="{{hasMoreData}}">
-      <list-item type="article"  class="article-item" onclick="openArticle($item.id, $item.albums, $item.title,$item.ingredients,$item.burden,$item.tags,$item.steps,$item.imtro)" onlongpress="shareLink($item.link)">
+      <list-item type="article"  class="article-item" onclick="openArticle($item.id, $item.albums[0], $item.title,$item.ingredients,$item.burden,$item.tags,$item.steps,$item.imtro)">
         <div style="display: flex" >
 
           <image class="clsimage"  src="{{$item.albums[0]}}"></image>
@@ -140,16 +140,6 @@
       hasMoreData: true,
 
     },
-    // {
-    //     id: '4',
-    //     albums: [],
-    //     title: '',
-    //     ingredients: '',
-    //     burden: '',
-    //     tags: '家常菜',
-    //     steps: [],
-    //     imtro: '',
-    //   }
     onInit() {
       var key = "bdf36bef0d0829a548b8704e4eda6247";
       var caimingsearch = 'http://apis.juhe.cn/cook/query?key=' + key + '&rn=30&menu=' + this.key;
@@ -197,16 +187,19 @@
     },
     //点击item
     openArticle(id, albums, title,ingredients,burden,tags,steps,imtro) {
-      var url = projectLink === '' ? link : projectLink
-      if (url !== '') {
-        this.$app.$def.router.push({
+console.log(steps);
+      router.push({
           uri: 'Webview',
           params: {
+            albums:albums,
             title: title,
-            url: url
+            ingredients: ingredients,
+            burden:burden,
+            tags:tags,
+            steps:steps,
+            imtro:imtro
           }
         })
-      }
     },
     /**
      * 当用户点击菜单按钮时触发，调用app中定义的方法showMenu
