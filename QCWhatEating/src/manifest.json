@@ -54,6 +54,10 @@
       "Webview":
       {
         "component": "index"
+      },
+      "IdWebview":
+      {
+        "component": "index"
       }
     }
   },
@@ -74,6 +78,10 @@
 
       },
       "Webview":{
+        "titleBarText": "菜肴详情",
+        "menu": false
+      },
+      "IdWebview":{
         "titleBarText": "菜肴详情",
         "menu": false
       }

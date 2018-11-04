@@ -10,9 +10,9 @@
     </div>
 
     <text class="tuijian">推荐</text>
-    <text class="clstjnameone">{{tjnameone}}</text>
-    <text class="clstjnametwo">{{tjnametwo}}</text>
-    <text class="clstjnamethree">{{tjnamethree}}</text>
+    <text class="clstjnameone" onclick="clickOpen">{{tjnameone}}</text>
+    <text class="clstjnametwo" onclick="clickOpen">{{tjnametwo}}</text>
+    <text class="clstjnamethree" onclick="clickOpen">{{tjnamethree}}</text>
 
     <text class="caipu">菜谱</text>
     <div class="caipu-type">
@@ -339,17 +339,16 @@
           success: function (data) {
             var tjtags = JSON.parse(data.data).result.data;
             if (tjtags.length == 1) {
-              console.log('1');
               that.tjnametwo = tjtags[0].title;
             } else if (tjtags.length == 2) {
               that.tjnameone = tjtags[1].title;
               that.tjnametwo = tjtags[0].title;
-              console.log('2');
+              
             } else if (tjtags.length == 3) {
               that.tjnameone = tjtags[0].title;
               that.tjnametwo = tjtags[1].title;
               that.tjnamethree = tjtags[2].title;
-              console.log('3');
+              
             } else if (tjtags.length > 3) {
               console.log('4');
             } else {
@@ -490,7 +489,21 @@
         })
       }
     },
-
+ //点击推荐
+ clickOpen(id, albums, title,ingredients,burden,tags,steps,imtro) {
+      router.push({
+          uri: 'Webview',
+          params: {
+            albums:albums,
+            title: title,
+            ingredients: ingredients,
+            burden:burden,
+            tags:tags,
+            steps:steps,
+            imtro:imtro
+          }
+        })
+    },
 
 
 
