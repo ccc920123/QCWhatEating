@@ -10,9 +10,17 @@
     </div>
 
     <text class="tuijian">推荐</text>
-    <text class="clstjnameone" onclick="clickOpen">{{tjnameone}}</text>
-    <text class="clstjnametwo" onclick="clickOpen">{{tjnametwo}}</text>
-    <text class="clstjnamethree" onclick="clickOpen">{{tjnamethree}}</text>
+    <!-- <text class="clstjnameone" onclick="clickOpen">{{tjnameone}}</text> -->
+    <text class="clstjnametwo" show="{{hasData}}">{{tjnametwo}}</text>
+    <!-- <text class="clstjnamethree" onclick="clickOpen">{{tjnamethree}}</text> -->
+    <list class="list-cls" show="{{hasMoreData}}">
+      <block for="articleList" >
+        <list-item onclick="clickOpen($item.id, $item.albums[0], $item.title,$item.ingredients,$item.burden,$item.tags,$item.steps,$item.imtro)">
+          <text class="clstjnameone">{{$item.title}}</text>
+        </list-item>
+      </block>
+
+    </list>
 
     <text class="caipu">菜谱</text>
     <div class="caipu-type">
@@ -92,7 +100,10 @@
     border-bottom-right-radius: 8px;
     border-top-right-radius: 8px;
   }
-
+.list-cls{
+  width: 100%;
+  height: 26%
+}
   .tuijian {
     padding-left: 10px;
     font-size: 30px;
@@ -100,12 +111,13 @@
     margin-top: 30px
   }
 
-
   .clstjnameone {
     font-size: 40px;
     color: rgb(252, 135, 115);
     margin-top: 20px;
     text-align: center;
+    lines: 1;
+    width: 100%;
 
   }
 
@@ -128,7 +140,6 @@
   .caipu {
     font-size: 30px;
     text-align: left;
-    margin-top: 30px;
     padding-left: 10px;
   }
 
@@ -226,7 +237,9 @@
       imageii05: '',
       imageii06: '',
       eatingInput: '',
-
+      articleList: [],
+      hasData: false,
+      hasMoreData: true,
 
 
 
@@ -329,6 +342,8 @@
       };
       const that = this;
       if (this.tjtag == "" || this.tjtag == null || this.tjtag == undefined) { // "",null,undefined
+        that.hasData = true;
+        that.hasMoreData = false;
         this.tjnametwo = "还没到点,休息一会儿吧";
       } else {
         //  调取接口获取数据
@@ -338,26 +353,39 @@
           url: 'http://apis.juhe.cn/cook/query?key=' + key + '&menu=' + that.tjtag + '&rn=&pn=',
           success: function (data) {
             var tjtags = JSON.parse(data.data).result.data;
-            if (tjtags.length == 1) {
-              that.tjnametwo = tjtags[0].title;
-            } else if (tjtags.length == 2) {
-              that.tjnameone = tjtags[1].title;
-              that.tjnametwo = tjtags[0].title;
-              
-            } else if (tjtags.length == 3) {
-              that.tjnameone = tjtags[0].title;
-              that.tjnametwo = tjtags[1].title;
-              that.tjnamethree = tjtags[2].title;
-              
+            console.log(tjtags);
+            if (tjtags.length > 1 && tjtags.length <= 3) {
+              //   that.tjnametwo = tjtags[0].title;
+              // } else if (tjtags.length == 2) {
+              //   that.tjnameone = tjtags[1].title;
+              //   that.tjnametwo = tjtags[0].title;
+
+              // } else if (tjtags.length == 3) {
+              //   that.tjnameone = tjtags[0].title;
+              //   that.tjnametwo = tjtags[1].title;
+              //   that.tjnamethree = tjtags[2].title;
+              that.hasData = false;
+              that.hasMoreData = true;
+              that.articleList = tjtags;
+
+
             } else if (tjtags.length > 3) {
-              console.log('4');
+
+              
+              that.articleList = getRandomArrayElements(tjtags, 3);
+              
             } else {
+              that.hasData = true;
+              that.hasMoreData = false;
               that.tjnametwo = "还没到点,休息一会儿吧";
             }
             //  resultcode
             // resultcode
           },
           fail: function (data, code) {
+            console.log('41');
+            that.hasData = true;
+            that.hasMoreData = false;
             that.tjnametwo = "还没到点,休息一会儿吧";
 
           }
@@ -477,11 +505,11 @@
       // 跳转到应用内的某个页面，router用法详见：文档->接口->页面路由
       if (this.eatingInput == '') {
         prompt.showToast({
-                message: '你要搜点什么？',
-              })
-       } else {
-       
-        
+          message: '你要搜点什么？',
+        })
+      } else {
+
+
         router.push({
           uri: '/DemoDetail',
           params: { key: this.eatingInput }
@@ -489,20 +517,21 @@
         })
       }
     },
- //点击推荐
- clickOpen(id, albums, title,ingredients,burden,tags,steps,imtro) {
+    //点击推荐
+    clickOpen(id, albums, title, ingredients, burden, tags, steps, imtro) {
+      console.log("demo" + this.steps);
       router.push({
-          uri: 'Webview',
-          params: {
-            albums:albums,
-            title: title,
-            ingredients: ingredients,
-            burden:burden,
-            tags:tags,
-            steps:steps,
-            imtro:imtro
-          }
-        })
+        uri: 'Webview',
+        params: {
+          albums: albums,
+          title: title,
+          ingredients: ingredients,
+          burden: burden,
+          tags: tags,
+          steps: steps,
+          imtro: imtro
+        }
+      })
     },
 
 

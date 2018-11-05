@@ -169,6 +169,7 @@
 
     },
     onInit() {
+       console.log("web"+this.steps);
       this.steps=JSON.parse(this.steps);
     // console.log(this.steps);
 
