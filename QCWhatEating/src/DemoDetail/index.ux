@@ -1,23 +1,24 @@
 <template>
+  <div class="doc-page">
+    <div>
+      <div class="seachspan">
+        <input type="text" class="seacheating" maxlength="16" placeholder="想吃点什么?" value="{{eatinginput}}" @change="bindphonechange"
+        />
+        <input class="soutu-btn" type="button" value="搜一下" onclick="searcheating" />
+      </div>
+    </div>
+    <div show="{{hasData}}">
+      <text>哎呀，没有找到你要的</text>
+    </div>
+    <list class="home-page">
 
-    <list class="home-page" onscrollbottom="loadMoreData">
-      
-      <list-item>
-        <div class="seachspan">
-          <input type="text" class="seacheating" maxlength="16" placeholder="想吃点什么?" value="{{eatinginput}}" @change="bindphonechange"
-          />
-          <input class="soutu-btn" type="button" value="搜一下" onclick="searcheating" />
-        </div>
-      </list-item>
-      <list-item show="{{hasData}}">
-          <text>哎呀，没有找到你要的</text>
-      </list-item>
+
       <block for="articleList" show="{{hasMoreData}}">
-        <list-item type="article"  class="article-item" onclick="openArticle($item.id, $item.albums[0], $item.title,$item.ingredients,$item.burden,$item.tags,$item.steps,$item.imtro)">
+        <list-item type="article" class="article-item" onclick="openArticle($item.id, $item.albums[0], $item.title,$item.ingredients,$item.burden,$item.tags,$item.steps,$item.imtro)">
           <div style="display: flex">
-  
-            <image class="clsimage"  src="{{$item.albums[0]}}"></image>
-  
+
+            <image class="clsimage" src="{{$item.albums[0]}}"></image>
+
             <div class="article-tip" style="flex-direction: column">
               <text class="text-title" style="flex: 1;lines:1;">{{$item.title}}</text>
               <text class="tip" style="flex: 1;lines:1;">主材: {{$item.ingredients}}</text>
@@ -27,166 +28,175 @@
         </list-item>
       </block>
     </list>
-  
-  
-  </template>
-  
-  <style>
-    .seachspan {
-  
-      flex-direction: row;
-      width: 100%;
-      height: 86px;
-      align-items: center;
-      margin-top: 20px;
-      padding-left: 10px;
-      padding-right: 10px;
-  
-    }
-  
-    .seacheating {
-      border-width: 1px;
-      border-color: #FF6347;
-      width: 80%;
-      height: 80px;
-      border-top-left-radius: 8px;
-      border-bottom-left-radius: 8px;
-  
-  
-    }
-  
-    .soutu-btn {
-      background: linear-gradient(45deg, #FF6347, rgb(245, 73, 73));
-      width: 20%;
-      height: 80px;
-      color: #ffffff;
-      border-bottom-right-radius: 8px;
-      border-top-right-radius: 8px;
-    }
-  
-    .article-item {
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      border-bottom-width: 1px;
-      border-bottom-color: #eeeeee;
-      width: 100%;
-      height: 220px;
-    }
-  
-    .clsimage {
-      border-bottom-right-radius: 8px;
-      border-top-right-radius: 8px;
-      border-top-left-radius: 8px;
-      border-bottom-left-radius: 8px;
-      width: 30%;
-    }
-  
-    .article-item .text-title {
-      font-size: 40px;
-      color: #2e3135;
-      text-overflow: ellipsis;
-      margin-left: 10px;
-      margin-right: 10px;
-  
-  
-    }
-  
-    .article-item .article-tip {
-      display: flex;
-      flex-direction: row;
-    }
-    .article-tip{
-  width: 70%;
-  
-    }
-   .tip {
-      font-size: 26px;
-      color: #757575;
-      lines: 1;
-      margin-left: 10px;
-      margin-right: 10px;
-  
-    }
-  
-   .time {
-      font-size: 24px;
-      color: #9e9e9e;
-      lines: 1;
-      margin-left: 10px;
-      margin-right: 10px;
-  
-    }
-  
-    .load-more {
-      padding: 20px;
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-    }
-  </style>
-  
-  <script>
-    import router from '@system.router'
-    import app from '@system.app'
-    import fetch from '@system.fetch'
-    import prompt from '@system.prompt'
-    export default {
-      data: {
-        eatinginput: '',
-        key: '',
-        articleList: [],
-        page: 0,
-        hasData: false,
-        hasMoreData: true,
-  
-      },
-      onInit() {
-        var key = "bdf36bef0d0829a548b8704e4eda6247";
-        var caimingsearch = 'http://apis.juhe.cn/cook/query?key=' + key + '&rn=30&menu=' + this.key;
-        const that = this;
-        fetch.fetch({
-          url: caimingsearch,
-          success: function (data) {
-            // console.info('key: ' + JSON.parse(data.data).result);
-            if (JSON.parse(data.data).result != null) {
-              var caimingarry = JSON.parse(data.data).result.data;
-              if (caimingarry.length > 0) {
-                that.hasData=false;
-                that.hasMoreData=true;
-                that.articleList = caimingarry;
-  
-              } else {
-                //没有数据
-                that.hasData=true;
-                that.hasMoreData=false;
-  
-              }
+  </div>
+
+</template>
+
+<style>
+  .doc-page {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .seachspan {
+
+    flex-direction: row;
+    width: 100%;
+    height: 86px;
+    align-items: center;
+    margin-top: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+
+  }
+
+  .seacheating {
+    padding-left: 10px;
+    border-width: 1px;
+    border-color: #FF6347;
+    width: 80%;
+    height: 80px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+
+
+  }
+
+  .soutu-btn {
+    background: linear-gradient(45deg, #FF6347, rgb(245, 73, 73));
+    width: 20%;
+    height: 80px;
+    color: #ffffff;
+    border-bottom-right-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+
+  .article-item {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    border-bottom-width: 1px;
+    border-bottom-color: #eeeeee;
+    width: 100%;
+    height: 220px;
+  }
+
+  .clsimage {
+    border-bottom-right-radius: 8px;
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    width: 30%;
+  }
+
+  .article-item .text-title {
+    font-size: 40px;
+    color: #2e3135;
+    text-overflow: ellipsis;
+    margin-left: 10px;
+    margin-right: 10px;
+
+
+  }
+
+  .article-item .article-tip {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .article-tip {
+    width: 70%;
+
+  }
+
+  .tip {
+    font-size: 26px;
+    color: #757575;
+    lines: 1;
+    margin-left: 10px;
+    margin-right: 10px;
+
+  }
+
+  .time {
+    font-size: 24px;
+    color: #9e9e9e;
+    lines: 1;
+    margin-left: 10px;
+    margin-right: 10px;
+
+  }
+
+  .load-more {
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+</style>
+
+<script>
+  import router from '@system.router'
+  import app from '@system.app'
+  import fetch from '@system.fetch'
+  import prompt from '@system.prompt'
+  export default {
+    data: {
+      eatinginput: '',
+      key: '',
+      articleList: [],
+      page: 0,
+      hasData: false,
+      hasMoreData: true,
+
+    },
+    onInit() {
+      var key = "bdf36bef0d0829a548b8704e4eda6247";
+      var caimingsearch = 'http://apis.juhe.cn/cook/query?key=' + key + '&rn=30&menu=' + this.key;
+      const that = this;
+      fetch.fetch({
+        url: caimingsearch,
+        success: function (data) {
+          // console.info('key: ' + JSON.parse(data.data).result);
+          if (JSON.parse(data.data).result != null) {
+            var caimingarry = JSON.parse(data.data).result.data;
+            if (caimingarry.length > 0) {
+              that.hasData = false;
+              that.hasMoreData = true;
+              that.articleList = caimingarry;
+
             } else {
               //没有数据
-              that.hasData=true;
-                that.hasMoreData=false;
+              that.hasData = true;
+              that.hasMoreData = false;
+
             }
-  
-          },
-          fail: function (data, code) {
-            prompt.showToast({
-              message: '哎呀，没有网络了',
-            })
+          } else {
+            //没有数据
+            that.hasData = true;
+            that.hasMoreData = false;
           }
-  
-        })
-      },
-      //开始搜索
-      searcheating() {
-        // 跳转到应用内的某个页面，router用法详见：文档->接口->页面路由
-        if (this.eatinginput == '') {
+
+        },
+        fail: function (data, code) {
           prompt.showToast({
-                  message: '你要搜点什么？',
-                })
-         } else {
-         
-          
+            message: '哎呀，没有网络了',
+          })
+        }
+
+      })
+    },
+    //开始搜索
+    searcheating() {
+      // 跳转到应用内的某个页面，router用法详见：文档->接口->页面路由
+      if (this.eatinginput == '') {
+        prompt.showToast({
+          message: '你要搜点什么？',
+        })
+      } else {
+
+
         var key = "bdf36bef0d0829a548b8704e4eda6247";
         var caimingsearch = 'http://apis.juhe.cn/cook/query?key=' + key + '&rn=30&menu=' + this.eatinginput;
         const that = this;
@@ -197,59 +207,59 @@
             if (JSON.parse(data.data).result != null) {
               var caimingarry = JSON.parse(data.data).result.data;
               if (caimingarry.length > 0) {
-                that.hasData=false;
-                that.hasMoreData=true;
+                that.hasData = false;
+                that.hasMoreData = true;
                 that.articleList = caimingarry;
-  
+
               } else {
                 //没有数据
-                that.hasData=true;
-                that.hasMoreData=false;
-  
+                that.hasData = true;
+                that.hasMoreData = false;
+
               }
             } else {
               //没有数据
-              that.hasData=true;
-                that.hasMoreData=false;
+              that.hasData = true;
+              that.hasMoreData = false;
             }
-  
+
           },
           fail: function (data, code) {
             prompt.showToast({
               message: '哎呀，没有网络了',
             })
           }
-  
+
         })
-        }
-      },
-      //点击item
-      openArticle(id, albums, title,ingredients,burden,tags,steps,imtro) {
-        
-        router.push({
-            uri: 'Webview',
-            params: {
-              albums:albums,
-              title: title,
-              ingredients: ingredients,
-              burden:burden,
-              tags:tags,
-              steps:steps,
-              imtro:imtro
-            }
-          })
-      },
-      /**
-       * 当用户点击菜单按钮时触发，调用app中定义的方法showMenu
-       * 注意：使用加载器测试`创建桌面快捷方式`功能时，请先在`系统设置`中打开`应用加载器`的`桌面快捷方式`权限
-       */
-      onMenuPress() {
-        this.$app.$def.showMenu()
-      },
-      bindphonechange(e) {
-        //值就是e.value
-        const that = this;
-        that.eatinginput = e.value;
       }
+    },
+    //点击item
+    openArticle(id, albums, title, ingredients, burden, tags, steps, imtro) {
+
+      router.push({
+        uri: 'Webview',
+        params: {
+          albums: albums,
+          title: title,
+          ingredients: ingredients,
+          burden: burden,
+          tags: tags,
+          steps: steps,
+          imtro: imtro
+        }
+      })
+    },
+    /**
+     * 当用户点击菜单按钮时触发，调用app中定义的方法showMenu
+     * 注意：使用加载器测试`创建桌面快捷方式`功能时，请先在`系统设置`中打开`应用加载器`的`桌面快捷方式`权限
+     */
+    onMenuPress() {
+      this.$app.$def.showMenu()
+    },
+    bindphonechange(e) {
+      //值就是e.value
+      const that = this;
+      that.eatinginput = e.value;
     }
-  </script>
+  }
+</script>

@@ -1,31 +1,32 @@
 <template>
     <!-- onscrollbottom="loadMoreData" -->
-  <list class="home-page" >
-    
-    <list-item>
+    <div class="doc-page">
+    <div>
       <image class="clsimage"  src="{{albums}}"></image>
-    </list-item>
-    <list-item>
-        <text class="clstitle">{{title}}</text>
-    </list-item>
-    <list-item>
-      <text class="clstag">{{tags}}</text>
-  </list-item>
+    </div>
+    <div>
+      <text class="clstitle">{{title}}</text>
+  </div>
+  <div>
+    <text class="clstag">{{tags}}</text>
+</div>
 <!-- 开始主料 -->
-<list-item>
-  <text style="font-weight:bold;margin-top: 20px;margin-left: 10px; margin-right: 10px;">主料</text>
-</list-item>
-<list-item>
-  <text class="clsingredients">{{ingredients}}</text>
-</list-item>
+<div>
+<text style="font-weight:bold;margin-top: 20px;margin-left: 10px; margin-right: 10px;">主料</text>
+</div>
+<div>
+<text class="clsingredients">{{ingredients}}</text>
+</div>
 <!-- 结束 -->
 <!-- 开始配料 -->
-<list-item>
-  <text style="font-weight:bold;margin-top: 20px;margin-left: 10px; margin-right: 10px;">配料</text>
-</list-item>
-<list-item>
-  <text class="clsburden">{{burden}}</text>
-</list-item>
+<div>
+<text style="font-weight:bold;margin-top: 20px;margin-left: 10px; margin-right: 10px;">配料</text>
+</div>
+<div>
+<text class="clsburden">{{burden}}</text>
+</div>
+  <list class="home-page" scrollpage="true" >
+
 <!-- 结束 -->
     <block for="steps" >
       <list-item type="articles"  class="articles-item">
@@ -39,13 +40,18 @@
         <text style="margin-top: 100px"></text>
       </list-item>
   </list>
-
+</div>
 
 </template>
 
 <style>
   
-
+.doc-page
+{
+  display: flex;
+    flex-direction: column;
+    width: 100%;
+}
   .article-item {
     padding: 20px;
     display: flex;
