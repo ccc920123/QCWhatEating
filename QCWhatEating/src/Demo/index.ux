@@ -14,7 +14,7 @@
     <text class="clstjnametwo" show="{{hasData}}">{{tjnametwo}}</text>
     <!-- <text class="clstjnamethree" onclick="clickOpen">{{tjnamethree}}</text> -->
     <list class="list-cls" show="{{hasMoreData}}">
-      <block for="articleList" >
+      <block for="articleList">
         <list-item onclick="clickOpen($item.id, $item.albums[0], $item.title,$item.ingredients,$item.burden,$item.tags,$item.steps,$item.imtro)">
           <text class="clstjnameone">{{$item.title}}</text>
         </list-item>
@@ -101,10 +101,12 @@
     border-bottom-right-radius: 8px;
     border-top-right-radius: 8px;
   }
-.list-cls{
-  width: 100%;
-  height: 26%
-}
+
+  .list-cls {
+    width: 100%;
+    height: 26%
+  }
+
   .tuijian {
     padding-left: 10px;
     font-size: 30px;
@@ -305,9 +307,11 @@
           break;
         case 14:
           this.hellotitle = "下午";
+          this.tjtag = "下午茶";
           break;
         case 15:
           this.hellotitle = "下午";
+          this.tjtag = "下午茶";
           break;
         case 16:
           this.hellotitle = "下午";
@@ -335,7 +339,6 @@
           break;
         case 22:
           this.hellotitle = "晚上";
-          // this.tjtag = "早餐";
           break;
         case 23:
           this.hellotitle = "晚上";
@@ -348,40 +351,45 @@
         that.hasMoreData = false;
         this.tjnametwo = "还没到点,休息一会儿吧";
       } else {
+
+           that.articleList=getFileTuiJianData(that.tjtag);
+
         //  调取接口获取数据
         //推荐的饮食
         //这里将开始请求推荐饮食数据
-        fetch.fetch({
-          url: 'http://apis.juhe.cn/cook/query?key=' + key + '&menu=' + that.tjtag + '&rn=&pn=',
-          success: function (data) {
-            var tjtags = JSON.parse(data.data).result.data;
-            if (tjtags.length > 1 && tjtags.length <= 3) {
-           
-              that.hasData = false;
-              that.hasMoreData = true;
-              that.articleList = tjtags;
+        //网络请求推荐菜谱 star
+        // fetch.fetch({
+        //   url: 'http://apis.juhe.cn/cook/query?key=' + key + '&menu=' + that.tjtag + '&rn=&pn=',
+        //   success: function (data) {
+        //     var tjtags = JSON.parse(data.data).result.data;
+        //     if (tjtags.length > 1 && tjtags.length <= 3) {
+
+        //       that.hasData = false;
+        //       that.hasMoreData = true;
+        //       that.articleList = tjtags;
 
 
-            } else if (tjtags.length > 3) {
+        //     } else if (tjtags.length > 3) {
 
-              
-              that.articleList = getRandomArrayElements(tjtags, 3);
-              
-            } else {
-              that.hasData = true;
-              that.hasMoreData = false;
-              that.tjnametwo = "还没到点,休息一会儿吧";
-            }
-            //  resultcode
-            // resultcode
-          },
-          fail: function (data, code) {
-            that.hasData = true;
-            that.hasMoreData = false;
-            that.tjnametwo = "还没到点,休息一会儿吧";
 
-          }
-        })
+        //       that.articleList = getRandomArrayElements(tjtags, 3);
+
+        //     } else {
+        //       that.hasData = true;
+        //       that.hasMoreData = false;
+        //       that.tjnametwo = "还没到点,休息一会儿吧";
+        //     }
+        //     //  resultcode
+        //     // resultcode
+        //   },
+        //   fail: function (data, code) {
+        //     that.hasData = true;
+        //     that.hasMoreData = false;
+        //     that.tjnametwo = "还没到点,休息一会儿吧";
+
+        //   }
+        // })
+        //end
       }
 
       ///测试数据开
@@ -546,5 +554,31 @@
       shuffled[i] = temp;
     }
     return shuffled.slice(min);
+  }
+  export function getFileTuiJianData(caiputag) {
+    console.log(caiputag);
+    if(caiputag=='早餐')
+    {
+    const foo = require('json-loader!./zaocan.json');
+
+    return getRandomArrayElements(foo.result.data, 3);
+  
+      }else if(caiputag=='午餐')
+      {
+        const foo = require('json-loader!./wucan.json');
+        return getRandomArrayElements(foo.result.data, 3);
+      }else if(caiputag=='下午茶')
+      {
+        const foo = require('json-loader!./xiawucha.json');
+        return getRandomArrayElements(foo.result.data, 3);
+      }else if(caiputag=='晚餐')
+      {
+        const foo = require('json-loader!./wancan.json');
+        return getRandomArrayElements(foo.result.data, 3);
+      }else if(caiputag=='夜宵')
+      {
+        const foo = require('json-loader!./yexiao.json');
+        return getRandomArrayElements(foo.result.data, 3);
+      }
   }
 </script>

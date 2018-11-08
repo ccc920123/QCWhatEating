@@ -153,7 +153,7 @@
     },
     onInit() {
       var key = "bdf36bef0d0829a548b8704e4eda6247";
-      var caimingsearch = 'http://apis.juhe.cn/cook/query?key=' + key + '&rn=30&menu=' + this.key;
+      var caimingsearch = 'http://apis.juhe.cn/cook/query?key=' + key + '&rn=30&pn=0&menu=' + this.key;
       const that = this;
       fetch.fetch({
         url: caimingsearch,
@@ -198,7 +198,7 @@
 
 
         var key = "bdf36bef0d0829a548b8704e4eda6247";
-        var caimingsearch = 'http://apis.juhe.cn/cook/query?key=' + key + '&rn=30&menu=' + this.eatinginput;
+        var caimingsearch = 'http://apis.juhe.cn/cook/query?key=' + key + '&rn=30&pn=0&menu=' + this.eatinginput;
         const that = this;
         fetch.fetch({
           url: caimingsearch,
