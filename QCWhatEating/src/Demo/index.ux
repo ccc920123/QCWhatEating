@@ -13,51 +13,34 @@
     <!-- <text class="clstjnameone" onclick="clickOpen">{{tjnameone}}</text> -->
     <text class="clstjnametwo" show="{{hasData}}">{{tjnametwo}}</text>
     <!-- <text class="clstjnamethree" onclick="clickOpen">{{tjnamethree}}</text> -->
-    <list class="list-cls" show="{{hasMoreData}}">
-      <block for="articleList">
+    <list class="list-cls">
+      <block for="articleList" show="{{hasMoreData}}">
         <list-item onclick="clickOpen($item.id, $item.albums[0], $item.title,$item.ingredients,$item.burden,$item.tags,$item.steps,$item.imtro)">
           <text class="clstjnameone">{{$item.title}}</text>
         </list-item>
       </block>
-
+      <list-item>
+        <text class="caipu">菜谱</text>
+      </list-item>
+      <block for="caipuList" style="display: flex">
+        <list-item class="caipu-type-item">
+          <stack class="caipu-type-one-one">
+            <image class="caipu-type-one-image" src="../Common/MainImage/{{$item.parentId}}.jpg"></image>
+            <text class="caipu-type-one-name">{{$item.name}}</text>
+          </stack>
+        </list-item>
+      </block>
     </list>
 
-    <text class="caipu">菜谱</text>
-    <div class="caipu-type">
-      <stack class="caipu-type-one-one">
-        <image class="caipu-type-one-image" src="{{imageii01}}"></image>
-        <text class="caipu-type-one-name">{{caiputypeoneonename}}</text>
-      </stack>
-      <stack class="caipu-type-one-two">
-        <image class="caipu-type-one-image" src="{{imageii02}}"></image>
-        <text class="caipu-type-one-name">{{caiputypeonetwoname}}</text>
-      </stack>
-      <stack class="caipu-type-one-three">
-        <image class="caipu-type-one-image" src="{{imageii03}}"></image>
-        <text class="caipu-type-one-name">{{caiputypeonethreename}}</text>
-      </stack>
-    </div>
-    <div class="caipu-type">
-      <stack class="caipu-type-one-one">
-        <image class="caipu-type-one-image" src="{{imageii04}}"></image>
-        <text class="caipu-type-one-name">{{caiputypetwoonename}}</text>
-      </stack>
-      <stack class="caipu-type-one-two">
-        <image class="caipu-type-one-image" src="{{imageii05}}"></image>
-        <text class="caipu-type-one-name">{{caiputypetwotwoname}}</text>
-      </stack>
-      <stack class="caipu-type-one-three">
-        <image class="caipu-type-one-image" src="{{imageii06}}"></image>
-        <text class="caipu-type-one-name">{{caiputypetwothreename}}</text>
-      </stack>
-    </div>
   </div>
 </template>
 
 <style>
   .demo-page {
+    /* flex-direction: column; */
+    display: flex;
     flex-direction: column;
-
+    width: 100%;
 
   }
 
@@ -104,7 +87,7 @@
 
   .list-cls {
     width: 100%;
-    height: 26%
+    height: 80%
   }
 
   .tuijian {
@@ -147,14 +130,16 @@
   }
 
 
-  .caipu-type {
-    width: 100%;
+  .caipu-type-item {
+    display: flex;
     flex-direction: row;
+    width: 100%;
     padding-left: 10px;
     padding-right: 10px;
     margin-top: 50px;
     align-items: center;
     align-content: center;
+    columns: 2
   }
 
   /* .caipu-type-two {
@@ -224,25 +209,12 @@
     public: {
       hellotitle: '早上',
       tjtag: '',
-      tjnameone: '',
       tjnametwo: '',
-      tjnamethree: '',
-      caiputypeoneonename: '',
-      caiputypeonetwoname: '',
-      caiputypeonethreename: '',
-      caiputypetwoonename: '',
-      caiputypetwotwoname: '',
-      caiputypetwothreename: '',
-      imageii01: '',
-      imageii02: '',
-      imageii03: '',
-      imageii04: '',
-      imageii05: '',
-      imageii06: '',
       eatingInput: '',
       articleList: [],
       hasData: false,
       hasMoreData: true,
+      caipuList: [],
 
 
 
@@ -352,7 +324,9 @@
         this.tjnametwo = "还没到点,休息一会儿吧";
       } else {
 
-           that.articleList=getFileTuiJianData(that.tjtag);
+        that.articleList = getFileTuiJianData(that.tjtag);
+        /////开始读取本地的数据（菜谱）
+
 
         //  调取接口获取数据
         //推荐的饮食
@@ -426,79 +400,83 @@
       /////测试结束
 
       //先判断本地是否有储存数据
-      file.get({
-        uri: 'internal://files/what/caipu.json',
-        success: function (data) {
-          //读取本地数据
-          file.readText({
-            uri: data.uri,
-            success: function (datas) {
+      //   file.get({
+      //     uri: 'internal://files/what/caipu.json',
+      //     success: function (data) {
+      //       //读取本地数据
+      //       file.readText({
+      //         uri: data.uri,
+      //         success: function (datas) {
 
-              if ((JSON.parse(JSON.parse(datas.text)).result.length) >= 28) {
-                var items = ['0', '1', '2', '4', '5', '6', '7', '8', '9', '10',
-                  '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21',
-                  '22', '23', '24', '25', '26', '27'];
-                var round = getRandomArrayElements(items, 6);
-                var objcaipu = JSON.parse(JSON.parse(datas.text)).result;
-                that.caiputypeoneonename = objcaipu[round[0]].name;
-                that.imageii01 = "../Common/MainImage/" + objcaipu[round[0]].parentId + ".jpg";
-                that.caiputypeonetwoname = objcaipu[round[1]].name;
-                that.imageii02 = "../Common/MainImage/" + objcaipu[round[1]].parentId + ".jpg";
-                that.caiputypeonethreename = objcaipu[round[2]].name;
-                that.imageii03 = "../Common/MainImage/" + objcaipu[round[2]].parentId + ".jpg";
-                that.caiputypetwoonename = objcaipu[round[3]].name;
-                that.imageii04 = "../Common/MainImage/" + objcaipu[round[3]].parentId + ".jpg";
-                that.caiputypetwotwoname = objcaipu[round[4]].name;
-                that.imageii05 = "../Common/MainImage/" + objcaipu[round[4]].parentId + ".jpg";
-                that.caiputypetwothreename = objcaipu[round[5]].name;
-                that.imageii06 = "../Common/MainImage/" + objcaipu[round[5]].parentId + ".jpg";
+      //           if ((JSON.parse(JSON.parse(datas.text)).result.length) >= 28) {
+      //             var items = ['0', '1', '2', '4', '5', '6', '7', '8', '9', '10',
+      //               '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21',
+      //               '22', '23', '24', '25', '26', '27'];
+      //             var round = getRandomArrayElements(items, 6);
+      //             var objcaipu = JSON.parse(JSON.parse(datas.text)).result;
+      //             that.caiputypeoneonename = objcaipu[round[0]].name;
+      //             that.imageii01 = "../Common/MainImage/" + objcaipu[round[0]].parentId + ".jpg";
+      //             that.caiputypeonetwoname = objcaipu[round[1]].name;
+      //             that.imageii02 = "../Common/MainImage/" + objcaipu[round[1]].parentId + ".jpg";
+      //             that.caiputypeonethreename = objcaipu[round[2]].name;
+      //             that.imageii03 = "../Common/MainImage/" + objcaipu[round[2]].parentId + ".jpg";
+      //             that.caiputypetwoonename = objcaipu[round[3]].name;
+      //             that.imageii04 = "../Common/MainImage/" + objcaipu[round[3]].parentId + ".jpg";
+      //             that.caiputypetwotwoname = objcaipu[round[4]].name;
+      //             that.imageii05 = "../Common/MainImage/" + objcaipu[round[4]].parentId + ".jpg";
+      //             that.caiputypetwothreename = objcaipu[round[5]].name;
+      //             that.imageii06 = "../Common/MainImage/" + objcaipu[round[5]].parentId + ".jpg";
 
-              }
-            }
-          })
-        },
-        fail: function (data, code) {
-          //开始请求网络数据
-          fetch.fetch({
-            url: 'http://apis.juhe.cn/cook/category?key=' + key,
-            success: function (data) {
-              this.tsetmsg = JSON.stringify(data.data);
-              //将数据存起来
-              file.writeText({
-                uri: 'internal://files/what/caipu.json',
-                text: this.tsetmsg,
-                success: function () {
-                  //这里操作数据
-                  var caiputags = JSON.parse(data.data);
-                  if (caiputags.result.length >= 28) {
-                    var items = ['0', '1', '2', '4', '5', '6', '7', '8', '9', '10',
-                      '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21',
-                      '22', '23', '24', '25', '26', '27'];
-                    var round = getRandomArrayElements(items, 6);
-                    that.caiputypeoneonename = caiputags.result[round[0]].name;
-                    that.imageii01 = "../Common/MainImage/" + caiputags.result[round[0]].parentId + ".jpg";
-                    that.caiputypeonetwoname = caiputags.result[round[1]].name;
-                    that.imageii02 = "../Common/MainImage/" + caiputags.result[round[1]].parentId + ".jpg";
-                    that.caiputypeonethreename = caiputags.result[round[2]].name;
-                    that.imageii03 = "../Common/MainImage/" + caiputags.result[round[2]].parentId + ".jpg";
-                    that.caiputypetwoonename = caiputags.result[round[3]].name;
-                    that.imageii04 = "../Common/MainImage/" + caiputags.result[round[3]].parentId + ".jpg";
-                    that.caiputypetwotwoname = caiputags.result[round[4]].name;
-                    that.imageii05 = "../Common/MainImage/" + caiputags.result[round[4]].parentId + ".jpg";
-                    that.caiputypetwothreename = caiputags.result[round[5]].name;
-                    that.imageii06 = "../Common/MainImage/" + caiputags.result[round[5]].parentId + ".jpg";
-                  }
-                }
-              })
-            },
-            fail: function (data, code) {
-              prompt.showToast({
-                message: '数据请求失败',
-              })
-            }
-          })
-        }
-      })
+      //           }
+      //         }
+      //       })
+      //     },
+      //     fail: function (data, code) {
+      //       //开始请求网络数据
+      //       fetch.fetch({
+      //         url: 'http://apis.juhe.cn/cook/category?key=' + key,
+      //         success: function (data) {
+      //           this.tsetmsg = JSON.stringify(data.data);
+      //           //将数据存起来
+      //           file.writeText({
+      //             uri: 'internal://files/what/caipu.json',
+      //             text: this.tsetmsg,
+      //             success: function () {
+      //               //这里操作数据
+      //               var caiputags = JSON.parse(data.data);
+      //               if (caiputags.result.length >= 28) {
+      //                 var items = ['0', '1', '2', '4', '5', '6', '7', '8', '9', '10',
+      //                   '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21',
+      //                   '22', '23', '24', '25', '26', '27'];
+      //                 var round = getRandomArrayElements(items, 6);
+      //                 that.caiputypeoneonename = caiputags.result[round[0]].name;
+      //                 that.imageii01 = "../Common/MainImage/" + caiputags.result[round[0]].parentId + ".jpg";
+      //                 that.caiputypeonetwoname = caiputags.result[round[1]].name;
+      //                 that.imageii02 = "../Common/MainImage/" + caiputags.result[round[1]].parentId + ".jpg";
+      //                 that.caiputypeonethreename = caiputags.result[round[2]].name;
+      //                 that.imageii03 = "../Common/MainImage/" + caiputags.result[round[2]].parentId + ".jpg";
+      //                 that.caiputypetwoonename = caiputags.result[round[3]].name;
+      //                 that.imageii04 = "../Common/MainImage/" + caiputags.result[round[3]].parentId + ".jpg";
+      //                 that.caiputypetwotwoname = caiputags.result[round[4]].name;
+      //                 that.imageii05 = "../Common/MainImage/" + caiputags.result[round[4]].parentId + ".jpg";
+      //                 that.caiputypetwothreename = caiputags.result[round[5]].name;
+      //                 that.imageii06 = "../Common/MainImage/" + caiputags.result[round[5]].parentId + ".jpg";
+      //               }
+      //             }
+      //           })
+      //         },
+      //         fail: function (data, code) {
+      //           prompt.showToast({
+      //             message: '数据请求失败',
+      //           })
+      //         }
+      //       })
+      //     }
+      //   })
+
+      that.caipuList = getFileTuiJianData('菜谱');
+      console.log(that.caipuList);
+
     },
     //开始跳转到搜索界面
     searchEating() {
@@ -556,29 +534,26 @@
     return shuffled.slice(min);
   }
   export function getFileTuiJianData(caiputag) {
-    console.log(caiputag);
-    if(caiputag=='早餐')
-    {
-    const foo = require('json-loader!./zaocan.json');
+    if (caiputag == '早餐') {
+      const foo = require('json-loader!./zaocan.json');
 
-    return getRandomArrayElements(foo.result.data, 3);
-  
-      }else if(caiputag=='午餐')
-      {
-        const foo = require('json-loader!./wucan.json');
-        return getRandomArrayElements(foo.result.data, 3);
-      }else if(caiputag=='下午茶')
-      {
-        const foo = require('json-loader!./xiawucha.json');
-        return getRandomArrayElements(foo.result.data, 3);
-      }else if(caiputag=='晚餐')
-      {
-        const foo = require('json-loader!./wancan.json');
-        return getRandomArrayElements(foo.result.data, 3);
-      }else if(caiputag=='夜宵')
-      {
-        const foo = require('json-loader!./yexiao.json');
-        return getRandomArrayElements(foo.result.data, 3);
-      }
+      return getRandomArrayElements(foo.result.data, 3);
+
+    } else if (caiputag == '午餐') {
+      const foo = require('json-loader!./wucan.json');
+      return getRandomArrayElements(foo.result.data, 3);
+    } else if (caiputag == '下午茶') {
+      const foo = require('json-loader!./xiawucha.json');
+      return getRandomArrayElements(foo.result.data, 3);
+    } else if (caiputag == '晚餐') {
+      const foo = require('json-loader!./wancan.json');
+      return getRandomArrayElements(foo.result.data, 3);
+    } else if (caiputag == '夜宵') {
+      const foo = require('json-loader!./yexiao.json');
+      return getRandomArrayElements(foo.result.data, 3);
+    } else if (caiputag == '菜谱') {
+      const foo = require('json-loader!./caipu.json');
+      return getRandomArrayElements(foo.result, 6);
+    }
   }
 </script>
