@@ -1,30 +1,38 @@
 <template>
-  <!-- template里只能有一个根节点 -->
   <div class="demo-page">
+
     <text class="hello">Hi客官{{hellotitle}}好!</text>
+    <list class="list-cls">
+    <list-item>
     <div class="seachspan">
 
       <input type="text" class="seacheating" maxlength="16" placeholder="{{hellotitle}}想吃点什么?" value="{{eatingInput}}" @change="bindPhoneChange"
       />
       <input class="soutu-btn" type="button" value="搜一下" onclick="searchEating" />
     </div>
+  </list-item>
+  
+      <list-item>
+        <text class="tuijian">推荐</text>
+      </list-item>
+      <list-item>
+        <text class="clstjnametwo" show="{{hasData}}">{{tjnametwo}}</text>
+      </list-item>
 
-    <text class="tuijian">推荐</text>
-    <!-- <text class="clstjnameone" onclick="clickOpen">{{tjnameone}}</text> -->
-    <text class="clstjnametwo" show="{{hasData}}">{{tjnametwo}}</text>
-    <!-- <text class="clstjnamethree" onclick="clickOpen">{{tjnamethree}}</text> -->
-    <list class="list-cls">
       <block for="articleList" show="{{hasMoreData}}">
-        <list-item onclick="clickOpen($item.id, $item.albums[0], $item.title,$item.ingredients,$item.burden,$item.tags,$item.steps,$item.imtro)">
+        <list-item type="articles" onclick="clickOpen($item.id, $item.albums[0], $item.title,$item.ingredients,$item.burden,$item.tags,$item.steps,$item.imtro)">
           <text class="clstjnameone">{{$item.title}}</text>
         </list-item>
       </block>
-      <list-item>
-        <text class="caipu">菜谱</text>
-      </list-item>
-      <block for="caipuList" style="display: flex">
-        <list-item class="caipu-type-item">
-          <stack class="caipu-type-one-one">
+    </list>
+    <div>
+    <text class="caipu">菜谱</text>
+    <text class="more" onclick="openMore()">更多</text>
+  </div>
+    <list class="list-clslist">
+      <block for="caipuList">
+        <list-item class="caipu-type-item" type="articlescp">
+          <stack class="caipu-stack">
             <image class="caipu-type-one-image" src="../Common/MainImage/{{$item.parentId}}.jpg"></image>
             <text class="caipu-type-one-name">{{$item.name}}</text>
           </stack>
@@ -37,8 +45,6 @@
 
 <style>
   .demo-page {
-    /* flex-direction: column; */
-    display: flex;
     flex-direction: column;
     width: 100%;
 
@@ -87,16 +93,15 @@
 
   .list-cls {
     width: 100%;
-    height: 80%
+    height: 44%;
+    flex-direction: column;
   }
-
   .tuijian {
     padding-left: 10px;
     font-size: 30px;
     text-align: left;
     margin-top: 30px
   }
-
   .clstjnameone {
     font-size: 40px;
     color: rgb(252, 135, 115);
@@ -115,78 +120,64 @@
 
   }
 
-  .clstjnamethree {
-    font-size: 40px;
-    color: rgb(252, 135, 115);
-    margin-top: 20px;
-    text-align: center;
-
-  }
-
   .caipu {
+    width: 50%;
     font-size: 30px;
     text-align: left;
     padding-left: 10px;
+    
+    
+  }
+  .more{
+    width: 50%;
+    font-size: 30px;
+    text-align: right;
+    padding-right: 10px;
+    color: rgb(4, 138, 248);
+    text-decoration:underline;
   }
 
-
-  .caipu-type-item {
-    display: flex;
-    flex-direction: row;
+  .list-clslist {
     width: 100%;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin-top: 50px;
-    align-items: center;
-    align-content: center;
-    columns: 2
-  }
-
-  /* .caipu-type-two {
+    height: 50%;
     flex-direction: row;
+    columns: 2;
+    align-items: center;
+    align-content: center;
+  }
+  .caipu-type-item {
+    width: 100%;
+    height: 100%;
     padding-left: 10px;
     padding-right: 10px;
     align-items: center;
     align-content: center;
-
-  } */
-
-  .caipu-type-one-one {
-
-    width: 60%;
-    height: 180px;
-    flex-direction: column;
-    align-items: center;
-    align-content: center;
-
   }
 
-  .caipu-type-one-two {
-
-    width: 60%;
-    height: 180px;
-    flex-direction: column;
-    align-items: center;
-    align-content: center;
-  }
-
-  .caipu-type-one-three {
-
-    width: 60%;
+  .caipu-stack {
+    width: 200px;
     height: 180px;
     align-items: center;
     align-content: center;
-    flex-direction: column;
+    padding-left: 10px;
+    padding-right: 10px;
+
   }
+
 
   .caipu-type-one-name {
-
+    width:100% ;
+    height: 100%;
     font-size: 30px;
     margin-top: 100px;
     color: rgb(233, 81, 10);
+    align-items: center;
+    align-content: center;
   }
 
   .caipu-type-one-image {
+    width: 100%;
+    height: 100%;
     border-bottom-right-radius: 8px;
     border-top-right-radius: 8px;
     border-top-left-radius: 8px;
@@ -494,6 +485,14 @@
 
         })
       }
+    },
+    openMore()
+    {
+      router.push({
+          uri: '/IdWebView',
+          params: { key: '' }
+
+        })
     },
     //点击推荐
     clickOpen(id, albums, title, ingredients, burden, tags, steps, imtro) {

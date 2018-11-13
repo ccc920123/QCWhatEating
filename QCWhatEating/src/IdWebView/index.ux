@@ -1,176 +1,46 @@
 <template>
     <!-- onscrollbottom="loadMoreData" -->
   <list class="home-page" >
-    
-    <list-item>
-      <image class="clsimage"  src="{{albums}}"></image>
-    </list-item>
-    <list-item>
-        <text class="clstitle">{{title}}</text>
-    </list-item>
-    <list-item>
-      <text class="clstag">{{tags}}</text>
-  </list-item>
-<!-- 开始主料 -->
-<list-item>
-  <text style="font-weight:bold;margin-top: 20px;margin-left: 10px; margin-right: 10px;">主料</text>
-</list-item>
-<list-item>
-  <text class="clsingredients">{{ingredients}}</text>
-</list-item>
-<!-- 结束 -->
-<!-- 开始配料 -->
-<list-item>
-  <text style="font-weight:bold;margin-top: 20px;margin-left: 10px; margin-right: 10px;">配料</text>
-</list-item>
-<list-item>
-  <text class="clsburden">{{burden}}</text>
-</list-item>
-<!-- 结束 -->
-    <block for="steps" >
-      <list-item type="articles"  class="articles-item">
-          <div class="articles-tip" style="flex-direction: column">
-            <text class="tip"> {{$item.step}}</text>
-            <image class="itemclsimage"  src="{{$item.img}}"></image>
-        </div>
-      </list-item>
-    </block>
-    <list-item>
-        <text style="margin-top: 100px"></text>
-      </list-item>
+    <block for="steps">
+   <list-item type="article" class="article-item">
+  <text>{{$item.name}}</text>
+   </list-item>
+  </block>
   </list>
 
 
 </template>
 
 <style>
-  
-
-  .article-item {
-    padding: 20px;
-    display: flex;
+  .home-page{
     flex-direction: column;
-    border-bottom-width: 1px;
-    border-bottom-color: #eeeeee;
     width: 100%;
-    height: 220px;
   }
-  .itemclsimage{
+
+.article-item
+{
+  flex-direction: row;
     width: 100%;
-  height: 400px;
-  }
-
-  .clsimage {
-  width: 100%;
-  height: 400px;
-  }
-  .clstitle {
-    font-size: 40px;
-    color: rgb(56, 54, 54);
-    margin-top: 20px;
-    text-align: center;
-    width: 100%;
-   
-
-  }
-  .clstag
-  {
-    font-size: 20px;
-    color: rgb(155, 153, 153);
-    margin-top: 20px;
-    margin-left: 10px;
-    margin-right: 10px;
-    text-align: center;
-  }
-  .clslines
-  {
-    width: 100%;
-    height: 1px;
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-top: 20px;
-    background: #c9c9c9
-  }
-  .clsingredients
-  {
-    font-size: 25px;
-    color: rgb(117, 116, 116);
-    margin-top: 20px;
-    margin-left: 10px;
-    margin-right: 10px;
-    text-align: center;
-    
-  }
-  .clsburden
-  {
-    font-size: 25px;
-    color: rgb(117, 116, 116);
-    margin-top: 20px;
-    margin-left: 10px;
-    margin-right: 10px;
-    text-align: center;
-    margin-bottom: 40px
-  }
-  .articles-item  {
-    font-size: 40px;
-    color: #2e3135;
-    text-overflow: ellipsis;
-    margin-left: 10px;
-    margin-right: 10px;
-  }
-
-  .articles-item .articles-tip {
-    display: flex;
-    flex-direction: row;
-  }
-
-  .tip {
-    font-size: 30px;
-    color: #252525;
-    margin-left: 10px;
-    margin-right: 10px;
-    width: 100%;
-    height: 20%;
-
-  }
-
-  .articles-tip {
-    font-size: 24px;
-    color: #9e9e9e;
-    margin-left: 10px;
-    margin-right: 10px;
-    width: 100%;
-    height: 500px;
-  }
-
-  /* .load-more {
-    padding: 20px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-  } */
+}
+ 
 </style>
 
 <script>
-  import router from '@system.router'
-  import app from '@system.app'
-  import fetch from '@system.fetch'
-  import prompt from '@system.prompt'
+  // import router from '@system.router'
+  // import app from '@system.app'
+  // import fetch from '@system.fetch'
+  // import prompt from '@system.prompt'
   export default {
     data: {
-            albums:'',
-            title: '',
-            ingredients: '',
-            burden:'',
-            tags:'',
-            steps:[],
-            imtro:''
+           
+            steps:[{name:1},{name:1},{name:1},{name:1},{name:1},{name:1}]
+          
     
 
     },
     onInit() {
-      this.steps=JSON.parse(this.steps);
-    // console.log(this.steps);
+    //   this.steps=JSON.parse(this.steps);
+    // // console.log(this.steps);
 
     
     },
