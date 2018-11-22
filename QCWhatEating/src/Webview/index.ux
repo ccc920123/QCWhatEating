@@ -132,7 +132,7 @@
 
   .tip {
     font-size: 30px;
-    color: #252525;
+    color: #4d4c4c;
     margin-left: 10px;
     margin-right: 10px;
     width: 100%;
@@ -175,9 +175,9 @@
 
     },
     onInit() {
-       console.log("web"+this.steps);
+
       this.steps=JSON.parse(this.steps);
-    // console.log(this.steps);
+  
 
     
     },
