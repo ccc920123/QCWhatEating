@@ -10,9 +10,14 @@
     <div show="{{hasData}}">
       <text>哎呀，没有找到你要的</text>
     </div>
+    <div class="wrap_loading" if="{{!articleList.length}}" show="{{notnet}}">
+      <div class="content">
+        <image src="../loading/loading7.gif"></image>
+      </div>
+    </div>
     <list class="home-page">
-
-
+      
+                                                                             
       <block for="articleList" show="{{hasMoreData}}">
         <list-item type="article" class="article-item" onclick="openArticle($item.id, $item.albums[0], $item.title,$item.ingredients,$item.burden,$item.tags,$item.steps,$item.imtro)">
           <div style="display: flex">
@@ -28,6 +33,7 @@
         </list-item>
       </block>
     </list>
+    
   </div>
 
 </template>
@@ -134,8 +140,21 @@
     flex-direction: row;
     justify-content: center;
   }
-</style>
+ 
+  .wrap_loading {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    justify-content: center;
+    align-items: center;
+   
+  } 
 
+  
+</style>
+<!-- <import name="loading-view" src="../loading/index.ux"></import> -->
 <script>
   import router from '@system.router'
   import app from '@system.app'
@@ -148,12 +167,15 @@
       articleList: [],
       page: 0,
       hasData: false,
-      hasMoreData: true,
+      hasMoreData: false,
+      notnet:true,
 
     },
     onInit() {
       var key = "bdf36bef0d0829a548b8704e4eda6247";
       var caimingsearch = 'http://apis.juhe.cn/cook/query?key=' + key + '&rn=30&pn=0&menu=' + this.key;
+      // var key = "28e6f70f8ebd4";
+      // var caimingsearch = 'http://apicloud.mob.com/v1/cook/menu/search?key=' + key + '&page=1&size=100&name=' + this.key;
       const that = this;
       fetch.fetch({
         url: caimingsearch,
@@ -180,8 +202,10 @@
 
         },
         fail: function (data, code) {
+          that.notnet=false;
           prompt.showToast({
             message: '哎呀，没有网络了',
+            
           })
         }
 
@@ -189,6 +213,7 @@
     },
     //开始搜索
     searcheating() {
+     
       // 跳转到应用内的某个页面，router用法详见：文档->接口->页面路由
       if (this.eatinginput == '') {
         prompt.showToast({
@@ -199,7 +224,12 @@
 
         var key = "bdf36bef0d0829a548b8704e4eda6247";
         var caimingsearch = 'http://apis.juhe.cn/cook/query?key=' + key + '&rn=30&pn=0&menu=' + this.eatinginput;
+
+        // var key = "28e6f70f8ebd4";
+        // var caimingsearch = 'http://apicloud.mob.com/v1/cook/menu/search?key=' + key + '&page=1&size=100&name=' + this.eatinginput;
+
         const that = this;
+        that.articleList= [];
         fetch.fetch({
           url: caimingsearch,
           success: function (data) {
@@ -215,7 +245,6 @@
                 //没有数据
                 that.hasData = true;
                 that.hasMoreData = false;
-
               }
             } else {
               //没有数据
@@ -225,6 +254,7 @@
 
           },
           fail: function (data, code) {
+            that.notnet=false;
             prompt.showToast({
               message: '哎呀，没有网络了',
             })

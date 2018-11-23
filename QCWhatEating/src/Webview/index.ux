@@ -12,7 +12,7 @@
 </div>
 <!-- 开始主料 -->
 <div>
-<text style="font-weight:bold;margin-top: 20px;margin-left: 10px; margin-right: 10px;">主料</text>
+<text style="font-weight:bold;margin-top: 20px;margin-left: 10px; margin-right: 10px;">料</text>
 </div>
 <div>
 <text class="clsingredients">{{ingredients}}</text>
@@ -20,7 +20,7 @@
 <!-- 结束 -->
 <!-- 开始配料 -->
 <div>
-<text style="font-weight:bold;margin-top: 20px;margin-left: 10px; margin-right: 10px;">配料</text>
+<text style="font-weight:bold;margin-top: 20px;margin-left: 10px; margin-right: 10px;">标签/辅料</text>
 </div>
 <div>
 <text class="clsburden">{{burden}}</text>
@@ -123,11 +123,13 @@
     text-overflow: ellipsis;
     margin-left: 10px;
     margin-right: 10px;
+
   }
 
   .articles-item .articles-tip {
     display: flex;
     flex-direction: row;
+    
   }
 
   .tip {
@@ -136,7 +138,7 @@
     margin-left: 10px;
     margin-right: 10px;
     width: 100%;
-    height: 20%;
+    height: 45%;
 
   }
 

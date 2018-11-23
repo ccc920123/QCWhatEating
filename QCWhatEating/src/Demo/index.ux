@@ -325,8 +325,8 @@
         that.articleList = getFileTuiJianData(that.tjtag);
        
       }
-
-      that.caipuList = getFileTuiJianData('菜谱');
+      //该功能目前未启用
+      // that.caipuList = getFileTuiJianData('菜谱');
 
     },
     //开始跳转到搜索界面

@@ -1,8 +1,8 @@
 {
   "package": "com.cdjysd.whateating",
   "name": "私人厨",
-  "versionName": "1.2.2",
-  "versionCode": "2",
+  "versionName": "1.2.4",
+  "versionCode": "3",
   "minPlatformVersion": "101",
   "icon": "/Common/logo.png",
   "features": [
@@ -63,7 +63,8 @@
     "menu": true,
     "pages": {
       "Demo": {
-        "titleBarText": "私人厨"
+        "titleBarText": "私人厨",
+        "menu": false
         
       },
       "DemoDetail": {
